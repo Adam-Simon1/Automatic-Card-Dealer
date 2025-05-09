@@ -1,0 +1,136 @@
+#include <Arduino.h>
+#include <U8g2lib.h>
+#include <Wire.h>
+#include "bitmap.cpp"
+
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE, 22, 21);
+
+void setup()
+{
+  u8g2.setColorIndex(1);
+  u8g2.begin();
+  u8g2.setBitmapMode(1);
+}
+
+void loop()
+{
+  u8g2.clearBuffer();
+
+  u8g2.drawXBMP(0, 0, 128, 64, bitmap_screenshot_gauges);
+
+  u8g2.sendBuffer();
+}
+
+
+
+#include <Arduino.h>
+#include <U8g2lib.h>
+#include <Wire.h>
+#include <PCF8574.h>
+
+#include "display.h"
+
+// Motors
+#define ROTATE_MOTOR_1 12
+#define ROTATE_MOTOR_2 13
+#define CARD_MOTOR_1 27
+#define CARD_MOTOR_2 14
+
+#define HALL_EFFECT 15
+
+int speed = 0;
+
+void home()
+{
+  int hallEffectValue = analogRead(HALL_EFFECT);
+
+  while (hallEffectValue > 1000 && hallEffectValue < 2500)
+  {
+    digitalWrite(ROTATE_MOTOR_1, HIGH);
+    digitalWrite(ROTATE_MOTOR_2, LOW);
+
+    hallEffectValue = analogRead(HALL_EFFECT);
+  }
+
+  digitalWrite(ROTATE_MOTOR_1, LOW);
+  digitalWrite(ROTATE_MOTOR_2, LOW);
+}
+
+int measureSpeed()
+{
+  unsigned long start = millis();
+  home();
+  unsigned long end = millis();
+
+  return end - start;
+}
+
+void shootCard()
+{
+  digitalWrite(CARD_MOTOR_1, HIGH);
+  digitalWrite(CARD_MOTOR_2, LOW);
+  delay(230);
+
+  digitalWrite(CARD_MOTOR_1, LOW);
+  digitalWrite(CARD_MOTOR_2, HIGH);
+  delay(230);
+
+  digitalWrite(CARD_MOTOR_1, LOW);
+  digitalWrite(CARD_MOTOR_2, LOW);
+}
+
+void timeCards(int numPlayers, int numCards, int speed)
+{
+  int offset = 200;
+  int cardInterval = speed / numPlayers - offset / numPlayers;
+
+  for (int card = 0; card < numCards; card++)
+  {
+    for (int player = 0; player < numPlayers; player++)
+    {
+      shootCard();
+
+      digitalWrite(ROTATE_MOTOR_1, HIGH);
+      digitalWrite(ROTATE_MOTOR_2, LOW);
+      delay(cardInterval);
+      digitalWrite(ROTATE_MOTOR_1, LOW);
+      digitalWrite(ROTATE_MOTOR_2, LOW);
+      delay(100);
+    }
+  }
+
+  digitalWrite(ROTATE_MOTOR_1, LOW);
+  digitalWrite(ROTATE_MOTOR_2, LOW);
+}
+
+void setup()
+{
+  Serial.begin(921600);
+  Wire.begin();
+  displayInit();
+
+  pinMode(ROTATE_MOTOR_1, OUTPUT);
+  pinMode(ROTATE_MOTOR_2, OUTPUT);
+
+  pinMode(CARD_MOTOR_1, OUTPUT);
+  pinMode(CARD_MOTOR_2, OUTPUT);
+
+  // delay(1000);
+  // home();
+  // delay(300);
+  // speed = measureSpeed();
+  // delay(300);
+}
+
+void loop()
+{
+  display();
+
+  // timeCards(8, 3, speed);
+  // delay(5000);
+}
+
+
+V2:
+fix pcb issues, flip secondary pcb connector, main board sleep pin
+esp-c3 lower power
