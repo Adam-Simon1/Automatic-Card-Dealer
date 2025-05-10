@@ -1,0 +1,12 @@
+#,Reference,Datasheet,Value,Footprint,Qty,DNP,LCSC part number
+1,C1,~,2.2µF,Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,1,,C107127
+2,C2,~,10µF,Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,1,,C380331
+3,"C3,C4",~,0.1µF,Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,2,,C1852967
+4,U1,http://www.advanced-monolithic.com/pdf/ds1117.pdf,AMS1117-3.3,Package_TO_SOT_SMD:SOT-223-3_TabPin2,1,,C45369270
+5,U7,http://www.ti.com/lit/ds/symlink/drv8833.pdf,DRV8833PW,Package_SO:TSSOP-16_4.4x5mm_P0.65mm,1,,C544801
+6,"R1,R2",~,4.7K,Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder,2,,C17673
+7,U2,http://www.nxp.com/docs/en/data-sheet/PCF8574_PCF8574A.pdf,PCF8574T,Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm,1,,C2987288
+8,"SW1,SW2,SW3,SW4,SW5,SW6",~,SW_Push,Button_Switch_THT:SW_PUSH_6mm,6,,C29781309
+9,J1,~,Conn_01x04,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,2,,C2691448
+10,"J1,J2,J3",~,Conn_01x02,Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,3,,C492401
+11,,,HSS49E,,1,,C41364880
